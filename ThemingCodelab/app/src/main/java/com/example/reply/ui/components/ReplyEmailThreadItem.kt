@@ -30,6 +30,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -48,7 +49,7 @@ fun ReplyEmailThreadItem(
         modifier = modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.background, MaterialTheme.shapes.medium)
             .padding(20.dp)
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -65,6 +66,9 @@ fun ReplyEmailThreadItem(
                 Text(
                     text = email.sender.firstName,
                 )
+                ProvideTextStyle(value = ) {
+                    
+                }
                 Text(
                     text = stringResource(id = R.string.twenty_mins_ago),
                 )
