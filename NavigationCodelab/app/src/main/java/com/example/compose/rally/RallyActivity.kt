@@ -25,17 +25,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.compose.rally.ui.accounts.AccountsScreen
-import com.example.compose.rally.ui.accounts.SingleAccountScreen
-import com.example.compose.rally.ui.bills.BillsScreen
+import com.example.compose.rally.ui.RallyNavHost
 import com.example.compose.rally.ui.components.RallyTabRow
-import com.example.compose.rally.ui.overview.OverviewScreen
+import com.example.compose.rally.ui.navigateSingleTopTo
 import com.example.compose.rally.ui.theme.RallyTheme
 
 /**
@@ -70,51 +64,7 @@ fun RallyApp() {
                 )
             }
         ) { innerPadding ->
-            NavHost(navController = navController, startDestination = Overview.route, modifier = Modifier.padding(innerPadding)) {
-                composable(route = Overview.route) {
-                    OverviewScreen(
-                        onClickSeeAllAccounts = {
-                            navController.navigateSingleTopTo(Accounts.route)
-                        },
-                        onClickSeeAllBills = {
-                            navController.navigateSingleTopTo(Bills.route)
-                        },
-                        onAccountClick = { accountType ->
-                            navController.navigateToSingleAccount(accountType)
-                        }
-                    )
-                }
-                composable(route = Accounts.route) {
-                    AccountsScreen { accountType ->
-                        navController.navigateToSingleAccount(accountType)
-                    }
-                }
-                composable(route = Bills.route) {
-                    BillsScreen()
-                }
-                composable(
-                    route = "${SingleAccount.route}/{${SingleAccount.accountTypeArg}}",
-                    arguments = SingleAccount.arguments,
-                    deepLinks = SingleAccount.deepLinks,
-                ) { navBackStackEntry ->
-                    val accountType = navBackStackEntry.arguments?.getString(SingleAccount.accountTypeArg)
-                    SingleAccountScreen(accountType)
-                }
-            }
+            RallyNavHost(navController = navController, modifier = Modifier.padding(innerPadding))
         }
     }
-}
-
-fun NavHostController.navigateSingleTopTo(route: String) =
-    this.navigate(route) {
-        popUpTo(this@navigateSingleTopTo.graph.findStartDestination().id)
-        {
-            saveState = true
-        }
-        restoreState = true
-        launchSingleTop = true
-    }
-
-private fun NavHostController.navigateToSingleAccount(accountType: String) {
-    this.navigateSingleTopTo("${SingleAccount.route}/$accountType")
 }
